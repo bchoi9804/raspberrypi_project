@@ -19,18 +19,18 @@ def select(query):
   
 @app.route("/lm35_chart")                   
 def lm35_chart():
-    sql = "SELECT DATATIME, HUMI, TEMP FROM temperature ORDER BY DATATIME ASC LIMIT 20" 
+    sql = "SELECT DATATIME, HUMI, TEMP FROM temperature ORDER BY DATATIME DESC LIMIT 10" 
     result = select(sql)
-    return render_template("test.html", result=result)
+    return render_template("lm35_chart.html", result=result)
   
 @app.route("/lm35_chart_act", methods=['GET', 'POST'])                   
 def lm35_chart_act():
   if request.method == 'POST': 
     start = request.form["start"]
     end = request.form["end"]  
-    sql = "SELECT DATATIME, HUMI, TEMP FROM temperature WHERE DATATIME >= '%s' AND DATATIME <= '%s' ORDER BY DATATIME ASC LIMIT 100" % (start, end)
+    sql = "SELECT DATATIME, HUMI, TEMP FROM temperature WHERE DATATIME >= '%s' AND DATATIME <= '%s'ORDER BY DATATIME DESC LIMIT 10" % (start, end)
     result = select(sql)  
-    return render_template("test.html", result=result) 
+    return render_template("lm35_chart.html", result=result) 
   
 if __name__ == '__main__':
   app.run(host='0.0.0.0')

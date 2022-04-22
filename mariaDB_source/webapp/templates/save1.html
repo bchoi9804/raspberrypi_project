@@ -40,7 +40,7 @@ var myChart = new Chart(ctx, {
   type: "line",
   data: {
     labels: [ // 날짜
-      {% for i in result %} 
+      {% for i in result %}, 
        {{ i[0] }},
       {% endfor %}
     ],
@@ -49,15 +49,15 @@ var myChart = new Chart(ctx, {
 	label: "습도 변화",
 	fill:false,
 	data: // 습도
-		[{% for i in result %} 
-		{{ i[1] }}
+		[{% for i in result %}, 
+		{{ i[1] }},
 		{% endfor %}],
 	backgroundColor: "rgba(255,99,132,0.2)",		  
 	borderColor: "rgba(255,99,132,1)",
 	borderWidth: 1,
 	lineTension:0.5 // 값을 높이면 line이 곡션 형태가 됨	      
       }
-      /*{
+      {
 	label: "온도 변화",
 	fill:false,
 	data: [ // 온도
@@ -69,7 +69,7 @@ var myChart = new Chart(ctx, {
 	borderColor: "rgba(54,162,235,1)",
 	borderWidth: 1,
 	lineTension:0.5	  	  		
-      }*/
+      }
     ],
   // Configuration options go here
     options: {
@@ -124,3 +124,93 @@ var myChart = new Chart(ctx, {
 </script>	
 </body>
 </html>
+
+
+<script>
+      var ctx = document.getElementById('Chart').getContext('2d');
+      var data = { 
+	      type: 'line',
+	      data: {
+		      labels: [
+			      [{% for i in result %} 
+				      {{ i[0] }},
+			      {% endfor %}]
+			      ],
+		      datasets: [{
+			      label: "온도 변화",
+			      backgroundColor: 'rgb(255, 120, 132)',
+		      fill:false,
+		      borderColor: 'rgb(255, 128, 132)',
+		      lineTension:0.5,
+		      data: [
+			      {% for i in result%} 
+			       {{ i[2] }},
+			      {% endfor %}
+		      ],
+	      }]
+      },
+      options: {
+	      scales: {
+		      xAxes: [{
+			      ticks: {
+				      suggestedMin: 0,
+				      suggestedMax: 100
+			      }
+		      }], 
+		      yAxes: [{
+			      ticks: {
+				      suggestedMin: 0, // Y축의 최고 값
+				      suggestedMax: 50 // Y축의 최대 값
+				  }
+			  }]
+		  }
+	  }
+  }
+
+var chart = new Chart(ctx, data);
+</script>
+
+<script>
+var ctx = document.getElementById("Chart").getContext("2d");
+var data = { 
+    type: "line",
+    data: {
+        labels: [
+            [{% for i in result %} 
+                {{ i[0] }},
+            {% endfor %}]
+            ],
+        datasets: [{
+            label: "온도 변화",
+            backgroundColor: 'rgb(255, 120, 132)',
+        fill:false,
+        borderColor: 'rgb(255, 128, 132)',
+        lineTension:0.5,
+        data: [
+            {% for i in result%} 
+             {{ i[2] }},
+            {% endfor %}
+        ],
+    }]
+},
+    options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            }], 
+            yAxes: [{
+                ticks: {
+                    suggestedMin: 0, // Y축의 최고 값
+                    suggestedMax: 50 // Y축의 최대 값
+                    }
+                }]
+            }
+        }
+    }
+	
+var chart = new Chart(ctx, data);
+
+</script>

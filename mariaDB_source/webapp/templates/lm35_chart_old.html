@@ -1,0 +1,153 @@
+﻿<html>
+<head>
+<title>온습도 서비스</title>
+<style type="text/css">
+.auto-style1 {
+	border: 1px solid #808080;
+}
+.auto-style2 {
+	border: 1px solid #008080;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
+</head>
+<body>
+<center>
+<br>
+<strong>온습도 서비스</strong>
+<br>
+<br>
+<br>
+
+<form method="post" action="lm35_chart_act">
+	검색 구간(YYYY-MM-DD HH:MM:SS 형식) : <input name="start" type="text"> ~ <input name="end" type="text">
+	<input name="Button1" type="submit" value="검색">
+</form>
+<table style="width: 70%">
+<tr>
+  <td width="50%">
+ <table cellspacing="1" class="auto-style1" style="width: 100%">
+{% for i in result %} 
+  <tr>
+	  <td class="auto-style2" style="width: 15%">시간: {{ i[0] }}</td>
+	  <td class="auto-style2" style="width: 10%">습도: {{ i[1] }}</td>
+	  <td class="auto-style2" style="width: 10%">온도: {{ i[2] }}</td>
+  </tr>
+{% endfor %}	
+</table> 
+  </td>
+  
+  <td width="70%">
+    
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="Chart" width="200px" height="200px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+  </td>
+</tr>
+</table>
+<br>
+
+</center>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script>
+var ctx = document.getElementById("Chart").getContext("2d");
+var data = { 
+        type: "line",
+        data: {
+            labels: [{% for i in result %}"{{ i[0] }}",{% endfor %}],
+            datasets: [
+                {
+                    label: "온도 변화",
+                    fill:false,
+                    backgroundColor: "rgba(255, 120, 132, 0.2)",
+                    borderColor: "rgba(255, 120, 132, 1)",
+                    borderWidth: 1,
+                    lineTension:0.5,
+                    data: [{% for i in result%}"{{ i[2] }}",{% endfor %}]
+                },
+               /*{
+                    label: "습도 변화",
+                    fill:false,
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",		  
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                    lineTension:0.5,   
+                    data: [{% for i in result %}"{{ i[1] }}",{% endfor %}]   
+                }*/
+            ],
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Creating Real-Time Charts with Flask'
+            },
+            tooltips: {
+                mode: '실시간 시간별 그래프',
+                intersect: false
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },            
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Time"
+                    }
+                    ticks: {
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }], 
+                yAxes: [
+                    {
+                    id: "A",
+                    position: "left",
+                    ticks: yTicksOpt,
+                   },
+                     {
+                        type: "linear",            
+                        display: true,
+                        position: "right",
+                        gridLines: {
+                            display: false
+                        },
+                        id: "B",
+                        labels: {
+                            show: false
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1,
+                            userCallback: function(value, index, values)
+                        }
+                      }
+                ]                
+            }
+        }
+    }
+}
+    
+var chart = new Chart(ctx, data);
+
+</script>
+
+</body>
+</html>
+
+
